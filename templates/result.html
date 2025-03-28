@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drift Result</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Results</h2>
+      <p><strong>Original Location:</strong><br>{{ orig_lat }}, {{ orig_lon }}</p>
+      <p><strong>Predicted Location:</strong><br>{{ new_lat }}, {{ new_lon }}</p>
+      <p><strong>Elapsed Time:</strong><br>{{ elapsed_hours }} hours</p>
+      <p><strong>Drift Distance:</strong><br>{{ drift_km }} km</p>
+      <p><strong>Object:</strong><br>{{ object_type }}</p>
+      {% if object_type == 'Person' %}
+        <p><strong>Life Jacket:</strong><br>{{ life_jacket }}</p>
+        <p><strong>Age Group:</strong><br>{{ age_group }}</p>
+      {% endif %}
+      <p><strong>Recommended Search Pattern:</strong><br>{{ search_pattern }}</p>
+      <p class="note"><em>{{ pattern_reason }}</em></p>
+      <a class="btn" href="/">&larr; New Prediction</a>
+    </aside>
+
+    <main class="main-content">
+      <h1>Predicted Drift</h1>
+      <div id="map"></div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.js"></script>
+  <script src="/static/map.js"></script>
+  <script>
+    try {
+      initMap({{ orig_lat }}, {{ orig_lon }}, {{ new_lat }}, {{ new_lon }});
+    } catch (e) {
+      console.error("Map failed to initialize:", e);
+    }
+  </script>
+</body>
+</html>

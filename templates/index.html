@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KairoAI - Search and Rescue Drift Tracker</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Incident Information</h2>
+      <form action="/predict" method="post">
+        <label>Latitude:</label>
+        <input type="number" step="any" name="latitude" required><br>
+
+        <label>Longitude:</label>
+        <input type="number" step="any" name="longitude" required><br>
+
+        <label>Incident Date:</label>
+        <input type="date" name="date" required><br>
+
+        <label>Incident Time:</label>
+        <input type="time" name="time" required><br>
+
+        <label>Prediction Time (Now):</label>
+        <input type="text" value="Auto-calculated from system time" disabled><br>
+
+        <label>Object Type:</label>
+        <select name="object_type" id="object_type" onchange="togglePersonFields()" required>
+          <option value="Person">Person</option>
+          <option value="Catamaran">Catamaran</option>
+          <option value="Hobby Cat">Hobby Cat</option>
+          <option value="Fishing Trawler">Fishing Trawler</option>
+          <option value="RHIB">RHIB</option>
+          <option value="SUP Board">SUP Board</option>
+          <option value="Windsurfer">Windsurfer</option>
+          <option value="Kayak">Kayak</option>
+        </select><br>
+
+        <div id="person-fields">
+          <label>Age Group:</label>
+          <select name="age_group">
+            <option value="Adult">Adult</option>
+            <option value="Adolescent">Adolescent</option>
+            <option value="Child">Child</option>
+          </select><br>
+
+          <label>Life Jacket:</label>
+          <select name="life_jacket">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select><br>
+        </div>
+
+        <button type="submit">Predict Drift</button>
+      </form>
+    </aside>
+
+    <main class="main-content">
+      <h1>Search and Rescue Drift Tracker</h1>
+      <p>This application predicts the drift from a past incident time to the current time using live ocean current data.</p>
+      <div id="map"></div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-velocity/dist/leaflet-velocity.min.js"></script>
+  <script src="/static/map.js"></script>
+  <script>
+    try {
+      initMap();
+    } catch (error) {
+      console.error("Failed to initialize map:", error);
+    }
+    function togglePersonFields() {
+      const obj = document.getElementById("object_type").value;
+      const fields = document.getElementById("person-fields");
+      fields.style.display = obj === "Person" ? "block" : "none";
+    }
+    togglePersonFields();
+  </script>
+</body>
+</html>

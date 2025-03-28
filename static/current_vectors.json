@@ -1,0 +1,52 @@
+import json
+import numpy as np
+from datetime import datetime
+
+# Generate synthetic current vector data formatted for leaflet-velocity
+def generate_synthetic_current_vectors():
+    width = 20
+    height = 20
+    u_data = []
+    v_data = []
+
+    for j in range(height):
+        for i in range(width):
+            # Create a simple flow to the east-northeast with variation
+            u = 0.5 + 0.1 * np.sin(i / 2)
+            v = 0.2 + 0.1 * np.cos(j / 2)
+            u_data.append(u)
+            v_data.append(v)
+
+    # Define metadata header
+    header = {
+        "parameterCategory": 2,
+        "parameterNumber": 2,
+        "parameterUnit": "m.s-1",
+        "parameterNumberName": "Eastward current",
+        "parameterCategoryName": "currents",
+        "refTime": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "nx": width,
+        "ny": height,
+        "lo1": 17.8,
+        "la1": -33.8,
+        "lo2": 18.8,
+        "la2": -34.8,
+        "dx": 0.05,
+        "dy": 0.05,
+        "gridDefinition": "regular_ll"
+    }
+
+    velocity_data = {
+        "header": header,
+        "uData": u_data,
+        "vData": v_data
+    }
+
+    return velocity_data
+
+# Save the JSON to file
+output_path = "/mnt/data/current_vectors.json"
+with open(output_path, "w") as f:
+    json.dump(generate_synthetic_current_vectors(), f, indent=2)
+
+output_path
